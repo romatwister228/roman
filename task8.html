@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <title>Dota 2 Hero Browser</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+        }
+
+        .controls input {
+            margin-right: 10px;
+            padding: 6px;
+        }
+
+        .controls button {
+            margin-right: 5px;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+
+        .controls button.active {
+            background-color: #333;
+            color: white;
+        }
+
+        #heroes-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .hero-card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 150px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .hero-card:hover {
+            background-color: #f0f0f0;
+        }
+
+        #hero-detail {
+            margin-top: 20px;
+            border: 1px solid #999;
+            padding: 15px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Dota 2 Hero Browser</h1>
+
+    <div class="controls">
+        <input type="text" id="search" placeholder="Поиск по имени...">
+        <button class="active" data-attr="all">Все</button>
+        <button data-attr="str">Strength</button>
+        <button data-attr="agi">Agility</button>
+        <button data-attr="int">Intelligence</button>
+    </div>
+
+    <div id="heroes-list"></div>
+
+    <div id="hero-detail"></div>
+
+    <script>
+        let allHeroes = [];
+        let currentAttr = 'all';
+
+        async function loadHeroes() {
+            const response = await fetch('https://api.opendota.com/api/heroes');
+            allHeroes = await response.json();
+            renderHeroes();
+        }
+
+        function renderHeroes() {
+            const query = document.getElementById('search').value.toLowerCase();
+
+            const filtered = allHeroes.filter(hero => {
+                const matchAttr = currentAttr === 'all' || hero.primary_attr === currentAttr;
+                const matchName = hero.localized_name.toLowerCase().includes(query);
+                return matchAttr && matchName;
+            });
+
+            const list = document.getElementById('heroes-list');
+            list.innerHTML = '';
+
+            filtered.forEach(hero => {
+                const card = document.createElement('div');
+                card.className = 'hero-card';
+                card.textContent = hero.localized_name;
+
+                card.addEventListener('click', function () {
+                    showDetail(hero);
+                });
+
+                list.appendChild(card);
+            });
+        }
+
+        function showDetail(hero) {
+            const detail = document.getElementById('hero-detail');
+            detail.style.display = 'block';
+            detail.innerHTML = '';
+
+            const name = document.createElement('h2');
+            name.textContent = hero.localized_name;
+
+            const attr = document.createElement('p');
+            attr.textContent = 'Атрибут: ' + hero.primary_attr;
+
+            const attack = document.createElement('p');
+            attack.textContent = 'Тип атаки: ' + hero.attack_type;
+
+            const roles = document.createElement('p');
+            roles.textContent = 'Роли: ' + hero.roles.join(', ');
+
+            detail.appendChild(name);
+            detail.appendChild(attr);
+            detail.appendChild(attack);
+            detail.appendChild(roles);
+        }
+
+        document.getElementById('search').addEventListener('input', function () {
+            renderHeroes();
+        });
+
+        const buttons = document.querySelectorAll('.controls button');
+        buttons.forEach(btn => {
+            btn.addEventListener('click', function () {
+                buttons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentAttr = this.dataset.attr;
+                renderHeroes();
+            });
+        });
+
+        loadHeroes();
+    </script>
+</body>
+
+</html>

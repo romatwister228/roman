@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Задание 2</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        body.dark-theme {
+            background-color: #1a1a2e;
+            color: #ffffff;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Переключение темы</h1>
+    <button id="theme-btn">Сменить тему</button>
+
+    <script>
+        const btn = document.querySelector('#theme-btn');
+
+        btn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <title>Dota 2 Heroes</title>
+</head>
+
+<body>
+    <h1>Герои Dota 2</h1>
+    <div id="heroes-list"></div>
+
+    <script>
+        async function loadHeroes() {
+            const response = await fetch('https://api.opendota.com/api/heroes');
+            const heroes = await response.json();
+
+            const list = document.getElementById('heroes-list');
+
+            heroes.forEach(hero => {
+                const div = document.createElement('div');
+                div.textContent = hero.localized_name;
+                list.appendChild(div);
+            });
+        }
+
+        loadHeroes();
+    </script>
+</body>
+
+</html>

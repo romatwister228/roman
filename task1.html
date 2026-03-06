@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Задание 1</title>
+</head>
+
+<body>
+    <h1 id="main-title">Заголовок страницы</h1>
+    <button id="change-btn">Нажми меня</button>
+
+    <script>
+        const btn = document.querySelector('#change-btn');
+
+        btn.addEventListener('click', () => {
+            const title = document.querySelector('#main-title');
+            title.textContent = 'Клик работает!';
+        });
+    </script>
+</body>
+
+</html>

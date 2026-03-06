@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Задание 3</title>
+</head>
+
+<body>
+    <h1>Счётчик кликов</h1>
+    <button id="count-btn">Нажми</button>
+    <span id="counter">0</span>
+
+    <script>
+        const btn = document.querySelector('#count-btn');
+        const counter = document.querySelector('#counter');
+        let count = 0;
+
+        btn.addEventListener('click', () => {
+            count = count + 1;
+            counter.textContent = count;
+        });
+    </script>
+</body>
+
+</html>
